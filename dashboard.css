@@ -1,205 +1,104 @@
-:root {
-    --bg-main: #f8fafc;
-    --bg-card: #ffffff;
-    --bg-card-sub: #f1f5f9;
-    --border-color: #e2e8f0;
-    --border-strong: #cbd5e1;
-    --text-main: #0f172a;
-    --text-muted: #64748b;
-    --btn-primary: #0f172a;
-    --btn-primary-text: #ffffff;
-}
-
-body {
-    background-color: var(--bg-main) !important;
-    color: var(--text-main) !important;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
-.container {
-    max-width: 1080px;
-}
-
-.badge {
-    color: #0f172a !important;
-    background-color: #e2e8f0 !important;
-    border: 1px solid var(--border-strong) !important;
-    font-weight: 600;
-}
-.card {
-    background-color: var(--bg-card) !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: 10px !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-}
-
-.card-header {
-    background-color: var(--bg-card-sub) !important;
-    border-bottom: 1px solid var(--border-color) !important;
-    padding: 1rem 1.25rem !important;
-    color: var(--text-main) !important;
-}
-
-.nav-pills .nav-link {
-    background-color: var(--bg-card);
-    color: var(--text-muted);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    font-weight: 600;
-    font-size: 14px;
-    padding: 9px 16px;
-    transition: all 0.2s ease;
-}
-
-.nav-pills .nav-link:hover {
-    background-color: var(--bg-card-sub);
-    color: var(--text-main);
-}
-
-.nav-pills .nav-link.active {
-    background-color: var(--btn-primary) !important;
-    color: var(--btn-primary-text) !important;
-    border-color: var(--btn-primary) !important;
-}
-
+/* dashboard.css - Estilos para la barra visual de las 16 gates */
 .radar-gates-track {
-    display: flex;
-    gap: 6px;
-    background: var(--bg-card-sub);
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid var(--border-strong);
-    overflow-x: auto;
+  display: flex;
+  background: #0f172a;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  overflow-x: auto;
 }
 
 .gate-cell {
-    flex: 1;
-    min-width: 52px;
-    height: 80px;
-    background: #ffffff;
-    border: 1px solid var(--border-strong);
-    border-radius: 6px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    position: relative;
-    transition: all 0.15s ease;
-    user-select: none;
+  flex: 1;
+  min-width: 52px;
+  height: 80px;
+  background: #1e293b;
+  border: 1px solid #475569;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
 }
 
 .gate-cell:hover {
-    border-color: #0f172a;
-    transform: translateY(-2px);
+  background: #334155;
+  border-color: #64748b;
+  transform: translateY(-2px);
 }
 
 .gate-num {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--text-main);
+  font-size: 13px;
+  font-weight: 700;
+  color: #f8fafc;
 }
 
 .gate-range {
-    font-size: 9px;
-    color: var(--text-muted);
-    margin-top: 2px;
+  font-size: 9px;
+  color: #94a3b8;
+  margin-top: 2px;
 }
 
+/* Tramo Calibrado (Base) */
 .gate-cell.gate-calibrated {
-    border: 2px solid #0f172a !important;
-    background: #f8fafc;
+  border: 2px solid #38bdf8 !important;
+  background: rgba(56, 189, 248, 0.15);
 }
 
+/* Presencia Actual Detectada */
 .gate-cell.gate-detected {
-    background: #0f172a !important;
-    border-color: #0f172a !important;
+  background: #ef4444 !important;
+  border-color: #f87171 !important;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.8);
+  animation: pulse-gate 1s infinite alternate;
 }
 
 .gate-cell.gate-detected .gate-num,
 .gate-cell.gate-detected .gate-range {
-    color: #ffffff !important;
+  color: #fff;
+  font-weight: 800;
 }
 
+/* Tramo Excluido */
 .gate-cell.gate-excluded {
-    background: #e2e8f0;
-    border: 1px dashed #94a3b8;
-    opacity: 0.6;
-}
-
-.gate-symbol {
-    font-size: 11px;
-    margin-top: 4px;
+  background: #18181b;
+  border: 1px dashed #52525b;
+  opacity: 0.55;
 }
 
 .gate-cross {
-    position: absolute;
-    top: 4px;
-    right: 6px;
-    color: #0f172a;
-    font-size: 11px;
-    font-weight: bold;
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  color: #ef4444;
+  font-size: 11px;
+  font-weight: bold;
 }
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-top: 4px;
+}
+.dot-calib { background: #38bdf8; }
+.dot-detect { background: #fca5a5; }
 
 .legend-box {
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    border-radius: 3px;
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
 }
-.legend-box.gate-calibrated { background: #ffffff; border: 2px solid #0f172a; }
-.legend-box.gate-detected { background: #0f172a; }
-.legend-box.gate-excluded { background: #e2e8f0; border: 1px dashed #94a3b8; }
+.legend-box.gate-calibrated { background: rgba(56, 189, 248, 0.3); border: 1px solid #38bdf8; }
+.legend-box.gate-detected { background: #ef4444; }
+.legend-box.gate-excluded { background: #18181b; border: 1px dashed #71717a; }
 
-.form-control {
-    background-color: #ffffff !important;
-    border: 1px solid var(--border-strong) !important;
-    color: var(--text-main) !important;
-    border-radius: 6px !important;
-    padding: 8px 12px !important;
-    font-size: 14px !important;
-}
-
-.form-control:focus {
-    border-color: #0f172a !important;
-    box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.1) !important;
-}
-
-.form-label {
-    color: var(--text-main) !important;
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    margin-bottom: 4px;
-}
-
-.form-text {
-    color: var(--text-muted) !important;
-    font-size: 12px;
-}
-
-.btn-primary {
-    background-color: var(--btn-primary) !important;
-    border-color: var(--btn-primary) !important;
-    color: var(--btn-primary-text) !important;
-    font-weight: 600 !important;
-    border-radius: 6px !important;
-    padding: 8px 18px !important;
-}
-
-.btn-primary:hover {
-    background-color: #334155 !important;
-}
-
-.btn-outline-warning, .btn-danger {
-    background-color: #ffffff !important;
-    color: #0f172a !important;
-    border: 1px solid var(--border-strong) !important;
-    font-weight: 600 !important;
-    border-radius: 6px !important;
-}
-
-.btn-outline-warning:hover, .btn-danger:hover {
-    background-color: #e2e8f0 !important;
+@keyframes pulse-gate {
+  from { opacity: 0.8; transform: scale(1); }
+  to { opacity: 1; transform: scale(1.05); }
 }
