@@ -1,6 +1,6 @@
 /**
  * dashboard.js - Frontend Asíncrono para el ESP32 + HLK-LD2420
- * Alojar en CDN externo (ej. jsDelivr / GitHub Pages)
+ * Diseño en Blanco y Negro de Alto Contraste basado en Iconos
  */
 let currentTab = 'sensor';
 let radarData = null;
@@ -17,41 +17,40 @@ async function fetchStatus() {
         renderLiveStatus();
     } catch (err) {
         console.error('Error fetching status:', err);
-        document.getElementById('statusBadge').className = 'badge bg-danger fs-6';
-        document.getElementById('statusBadge').innerText = 'Desconectado';
+        const badge = document.getElementById('statusBadge');
+        if (badge) {
+            badge.className = 'badge';
+            badge.innerText = '✖ Desconectado';
+        }
     }
 }
 
 function renderLiveStatus() {
     if (!radarData) return;
 
-    document.getElementById('headerDeviceName').innerText = radarData.deviceName || 'ESP32 Radar';
+    const titleEl = document.getElementById('headerDeviceName');
+    if (titleEl) titleEl.innerText = radarData.deviceName || 'ESP32 Radar';
+
     const badge = document.getElementById('statusBadge');
+    if (!badge) return;
 
     let stateText = radarData.state;
-    let bgClass = 'bg-info';
 
     if (radarData.state === 'WAIT_CALIB_30S') {
-        stateText = 'Esperando despeje (' + radarData.timeRemainingSec + 's)';
-        bgClass = 'bg-warning text-dark';
+        stateText = '⏳ Despejando (' + radarData.timeRemainingSec + 's)';
     } else if (radarData.state === 'CALIBRATING_10S') {
-        stateText = 'Muestreando base (' + radarData.timeRemainingSec + 's)';
-        bgClass = 'bg-primary';
+        stateText = '⚙ Calibrando (' + radarData.timeRemainingSec + 's)';
     } else if (radarData.state === 'MONITORING_5S') {
-        stateText = 'Monitoreo Activo (5s)';
-        bgClass = 'bg-success';
+        stateText = '● Monitoreo Activo';
     } else if (radarData.state === 'VERIFYING_1S') {
-        stateText = 'Verificando anomalía (' + radarData.verifyCounter + '/3)';
-        bgClass = 'bg-danger animate-pulse';
+        stateText = '▲ Verificando (' + radarData.verifyCounter + '/3)';
     } else if (radarData.state === 'COOLDOWN_15S') {
-        stateText = 'Alerta / Cooldown (' + radarData.timeRemainingSec + 's)';
-        bgClass = 'bg-danger';
+        stateText = '⚑ Alerta / Cooldown (' + radarData.timeRemainingSec + 's)';
     } else if (radarData.state === 'BURST_SNOOZE') {
-        stateText = 'Silenciado (' + radarData.timeRemainingSec + 's)';
-        bgClass = 'bg-secondary';
+        stateText = '⨂ Silenciado (' + radarData.timeRemainingSec + 's)';
     }
 
-    badge.className = 'badge fs-6 ' + bgClass;
+    badge.className = 'badge';
     badge.innerText = stateText;
 
     if (currentTab === 'sensor') {
@@ -76,75 +75,75 @@ function renderSensorTab(container) {
     container.innerHTML = `
     <div class="card mb-4">
     <div class="card-header d-flex justify-content-between align-items-center">
-    <h5 class="m-0">Pestaña 1: Segmentación de Puertas de Detección (Gates 0 - 15)</h5>
+    <h5 class="m-0 fs-6">Segmentación de Puertas de Detección (Gates 0 - 15)</h5>
     <button class="btn btn-sm btn-outline-warning" onclick="triggerCalibrate()">
     🔄 Recalibrar Fondo
     </button>
     </div>
     <div class="card-body">
     <p class="text-muted mb-3" style="font-size: 13px;">
-    Cada tramo representa 0.70 metros (hasta 11.2m). Haga clic en cualquier tramo para excluirlo de la detección.
+    Cada tramo representa 0.70 metros (hasta 11.2m). Haga clic en un tramo para excluirlo.
     </p>
 
-    <!-- Barra continua de 16 Gates -->
+    <!-- Pista de 16 Gates -->
     <div class="radar-gates-track mb-3" id="gatesTrack"></div>
 
-    <!-- Leyenda -->
-    <div class="d-flex flex-wrap gap-3 small text-muted mb-4">
-    <div class="d-flex align-items-center gap-1">
-    <span class="legend-box gate-calibrated"></span> Tramo Calibrado (Base)
+    <!-- Leyenda basada en Iconos -->
+    <div class="d-flex flex-wrap gap-4 small text-dark fw-bold mb-4">
+    <div class="d-flex align-items-center gap-2">
+    <span class="legend-box gate-calibrated">⦿</span> Base Calibrada
     </div>
-    <div class="d-flex align-items-center gap-1">
-    <span class="legend-box gate-detected"></span> Presencia Actual
+    <div class="d-flex align-items-center gap-2">
+    <span class="legend-box gate-detected">▲</span> Presencia Detección
     </div>
-    <div class="d-flex align-items-center gap-1">
-    <span class="legend-box gate-excluded"></span> Tramo Excluido (Mudo)
+    <div class="d-flex align-items-center gap-2">
+    <span class="legend-box gate-excluded">✕</span> Excluido (Mudo)
     </div>
     </div>
 
-    <hr class="border-secondary my-4" style="opacity: 0.2;">
+    <hr class="my-4" style="border-top: 2px solid #000; opacity: 1;">
 
-    <h6 class="fw-bold mb-3">Parámetros de Lectura y Temporización</h6>
+    <h6 class="fw-bold mb-3 text-uppercase" style="letter-spacing:0.05em;">Parámetros de Lectura y Temporización</h6>
     <form id="sensorForm" onsubmit="saveSensorConfig(event)">
     <div class="row g-3">
     <div class="col-md-4">
-    <label class="form-label">Frecuencia de Escaneo (segundos)</label>
+    <label class="form-label">Frecuencia de Escaneo (seg)</label>
     <input type="number" class="form-control" id="scanSec" value="5" min="1" max="60">
-    <div class="form-text mt-1" style="font-size: 11px;">Tiempo entre lecturas en reposo.</div>
+    <div class="form-text mt-1">Tiempo entre lecturas en reposo.</div>
     </div>
     <div class="col-md-4">
-    <label class="form-label">Cooldown de Notificación (segundos)</label>
+    <label class="form-label">Cooldown Notificación (seg)</label>
     <input type="number" class="form-control" id="coolSec" value="15" min="5" max="120">
-    <div class="form-text mt-1" style="font-size: 11px;">Mínimo entre alertas continuas.</div>
+    <div class="form-text mt-1">Tiempo mínimo entre alertas.</div>
     </div>
     <div class="col-md-4">
-    <label class="form-label">Tolerancia de Anomalía (± cm)</label>
+    <label class="form-label">Tolerancia Anomalía (± cm)</label>
     <input type="number" class="form-control" id="tolCm" value="25" min="5" max="100">
-    <div class="form-text mt-1" style="font-size: 11px;">Variación mínima respecto al fondo.</div>
+    <div class="form-text mt-1">Variación respecto al fondo.</div>
     </div>
     </div>
 
     <div class="card p-3 mt-4">
     <div class="form-check form-switch mb-2">
     <input class="form-check-input" type="checkbox" id="snoozeEn" onchange="toggleSnoozeFields()">
-    <label class="form-check-label fw-semibold" for="snoozeEn" style="cursor: pointer; font-size: 13px;">
-    Dejar de notificar temporalmente tras actividad continua (Burst Snooze)
+    <label class="form-check-label fw-bold" for="snoozeEn" style="cursor: pointer; font-size: 13px;">
+    Silenciado automático tras actividad continua (Burst Snooze)
     </label>
     </div>
     <div class="row g-3 mt-1" id="snoozeFields" style="display:none;">
     <div class="col-md-6">
-    <label class="form-label">Alertas continuas antes de silenciar</label>
+    <label class="form-label">Alertas antes de silenciar</label>
     <input type="number" class="form-control" id="snzCount" value="6" min="2" max="20">
     </div>
     <div class="col-md-6">
-    <label class="form-label">Tiempo de silenciado (segundos)</label>
+    <label class="form-label">Tiempo de silencio (segundos)</label>
     <input type="number" class="form-control" id="snzSec" value="300" min="30" max="3600">
     </div>
     </div>
     </div>
 
     <div class="mt-4">
-    <button type="submit" class="btn btn-primary px-4">Guardar Ajustes de Sensor</button>
+    <button type="submit" class="btn btn-primary px-4">Guardar Ajustes</button>
     </div>
     </form>
     </div>
@@ -172,13 +171,22 @@ function updateGatesVisual() {
         const distStart = (g * GATE_SIZE_M).toFixed(1);
         const distEnd = ((g + 1) * GATE_SIZE_M).toFixed(1);
 
+        let icon = '';
+        if (isCurrent) {
+            icon = '<span class="gate-symbol" title="Presencia">▲</span>';
+        } else if (isCalibrated) {
+            icon = '<span class="gate-symbol" title="Calibrado">⦿</span>';
+        } else if (isExcluded) {
+            icon = '<span class="gate-symbol" title="Excluido">✕</span>';
+        } else {
+            icon = '<span class="gate-symbol" style="opacity:0.2;">·</span>';
+        }
+
         html += `
         <div class="${classes.join(' ')}" onclick="toggleGate(${g})" title="Gate ${g} (${distStart}m - ${distEnd}m)">
         <div class="gate-num">G${g}</div>
+        ${icon}
         <div class="gate-range">${distStart}-${distEnd}m</div>
-        ${isCalibrated && !isCurrent ? '<span class="gate-symbol" title="Base Calibrada">⊙</span>' : ''}
-        ${isCurrent ? '<span class="gate-symbol" title="Detectado">⚡</span>' : ''}
-        ${isExcluded ? '<span class="gate-cross">✕</span>' : ''}
         </div>
         `;
     }
@@ -240,7 +248,7 @@ function renderGeneralTab(container) {
     container.innerHTML = `
     <div class="card">
     <div class="card-header">
-    <h5 class="m-0">Pestaña 2: Ajustes Generales, Red y Telegram</h5>
+    <h5 class="m-0 fs-6">Ajustes Generales, Red y Telegram</h5>
     </div>
     <div class="card-body">
     <form onsubmit="saveGeneralConfig(event)">
@@ -256,7 +264,7 @@ function renderGeneralTab(container) {
     <div class="col-md-6">
     <label class="form-label">Contraseña Wi-Fi</label>
     <input type="password" class="form-control" id="genPass" value="******">
-    <div class="form-text mt-1" style="font-size: 11px;">Mantenga '******' si no desea modificarla.</div>
+    <div class="form-text mt-1">Mantenga '******' si no desea modificarla.</div>
     </div>
     </div>
     <div class="row g-3 mb-3">
@@ -270,10 +278,10 @@ function renderGeneralTab(container) {
     </div>
     </div>
     <div class="mb-4">
-    <label class="form-label">URL del Servidor de Actualizaciones (version.json)</label>
+    <label class="form-label">URL del Servidor de Actualizaciones (OTA)</label>
     <input type="text" class="form-control" id="genOtaUrl">
     </div>
-    <button type="submit" class="btn btn-danger px-4">Guardar y Reiniciar ESP32</button>
+    <button type="submit" class="btn btn-danger px-4">Guardar y Reiniciar Dispositivo</button>
     </form>
     </div>
     </div>
