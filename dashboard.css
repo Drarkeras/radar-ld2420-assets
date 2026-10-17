@@ -26,8 +26,6 @@ body {
     border: 1px solid var(--border-strong) !important;
     font-weight: 600;
 }
-
-/* Tarjetas y Contenedores */
 .card {
     background-color: var(--bg-card) !important;
     border: 1px solid var(--border-color) !important;
@@ -42,7 +40,6 @@ body {
     color: var(--text-main) !important;
 }
 
-/* Pestañas */
 .nav-pills .nav-link {
     background-color: var(--bg-card);
     color: var(--text-muted);
@@ -65,7 +62,6 @@ body {
     border-color: var(--btn-primary) !important;
 }
 
-/* Pistas e Indicadores de las Gates (0 - 15) */
 .radar-gates-track {
     display: flex;
     gap: 6px;
@@ -110,7 +106,6 @@ body {
     margin-top: 2px;
 }
 
-/* Señalización de Gates basada en bordes e iconos claros */
 .gate-cell.gate-calibrated {
     border: 2px solid #0f172a !important;
     background: #f8fafc;
@@ -146,7 +141,6 @@ body {
     font-weight: bold;
 }
 
-/* Leyenda */
 .legend-box {
     display: inline-block;
     width: 14px;
@@ -157,7 +151,6 @@ body {
 .legend-box.gate-detected { background: #0f172a; }
 .legend-box.gate-excluded { background: #e2e8f0; border: 1px dashed #94a3b8; }
 
-/* Controles de Formulario */
 .form-control {
     background-color: #ffffff !important;
     border: 1px solid var(--border-strong) !important;
@@ -186,7 +179,6 @@ body {
     font-size: 12px;
 }
 
-/* Botones */
 .btn-primary {
     background-color: var(--btn-primary) !important;
     border-color: var(--btn-primary) !important;
