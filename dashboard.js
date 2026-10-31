@@ -41,7 +41,6 @@ const UI_TEXT = {
     deviceNameLabel: 'Nombre del Dispositivo',
     wifiSsidLabel: 'SSID Wi‑Fi',
     wifiPasswordLabel: 'Contraseña Wi‑Fi',
-    wifiPasswordHint: 'Mantenga \'******\' si no desea modificarla.',
     telegramTokenLabel: 'Telegram Bot Token',
     telegramChatLabel: 'Telegram Chat ID',
     otaUrlLabel: 'URL del Servidor de Actualizaciones (version.json)',
@@ -90,7 +89,6 @@ const UI_TEXT = {
     deviceNameLabel: 'Device Name',
     wifiSsidLabel: 'Wi‑Fi SSID',
     wifiPasswordLabel: 'Wi‑Fi Password',
-    wifiPasswordHint: 'Keep \'******\' if you do not want to change it.',
     telegramTokenLabel: 'Telegram Bot Token',
     telegramChatLabel: 'Telegram Chat ID',
     otaUrlLabel: 'Update Server URL (version.json)',
@@ -404,7 +402,6 @@ function renderGeneralTab(container) {
             <div class="col-md-6">
               <label class="form-label">${t.wifiPasswordLabel}</label>
               <input type="password" class="form-control bg-dark text-light border-secondary" id="genPass" value="******">
-              <div class="form-text text-muted">${t.wifiPasswordHint}</div>
             </div>
           </div>
           <div class="row g-3 mb-3">
